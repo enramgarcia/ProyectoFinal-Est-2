@@ -1,0 +1,17 @@
+﻿<Window x:Class="ProyectoFinal.Windows.LinkedLists.UserTaskQueueWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProyectoFinal.Windows.LinkedLists"
+        xmlns:views="clr-namespace:ProyectoFinal.Views.Queues"
+        mc:Ignorable="d"
+        Title="Cola de Prioridad" 
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Height="450"
+        Width="800">
+    <Grid>
+        <views:UserQueueTaskView />
+    </Grid>
+</Window>

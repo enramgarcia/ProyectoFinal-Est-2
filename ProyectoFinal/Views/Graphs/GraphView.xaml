@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="ProyectoFinal.Views.Graphs.GraphView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ProyectoFinal.Views.Graphs"
+             mc:Ignorable="d" 
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <Style x:Key="EdgeLineStyle" TargetType="Line">
+                <Setter Property="Stroke" Value="Gray" />
+                <Setter Property="StrokeThickness" Value="2" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsHighLighted}" Value="True">
+                        <Setter Property="Stroke" Value="Green" />
+                        <Setter Property="StrokeThickness" Value="4" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <Label Content="Ubicación *" />
+                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="250" Padding="0 3" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Content="Agregar" Command="{Binding AddNode}" Margin="5 0 0 0" Height="25" Padding="20 0" />
+                <Button Content="Buscar Ruta" Command="{Binding FindDistance}" Margin="5 0 0 0" Height="25" Padding="20 0" />
+            </StackPanel>
+        </StackPanel>
+        
+        <ScrollViewer Grid.Row="1" Margin="0 5 0 0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Canvas Background="#eeeeee" x:Name="GraphCanvas" MouseWheel="Canvas_MouseWheel">
+                <!-- Edges -->
+                <ItemsControl ItemsSource="{Binding Edges}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Line X1="{Binding From.X, Converter={StaticResource OffsetConverter}}" 
+                                  Y1="{Binding From.Y, Converter={StaticResource OffsetConverter}}" 
+                                  X2="{Binding To.X, Converter={StaticResource OffsetConverter}}" 
+                                  Y2="{Binding To.Y, Converter={StaticResource OffsetConverter}}"
+                                  Style="{StaticResource EdgeLineStyle}"
+                                  Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext}">
+                                <Line.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Editar"
+                                                  Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.Tag.GraphVm.EditEdge}"
+                                                  CommandParameter="{Binding}" />
+                                        <MenuItem Header="Eliminar"
+                                                  Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.Tag.GraphVm.DeleteEdge}"
+                                                  CommandParameter="{Binding}" />
+                                    </ContextMenu>
+                                </Line.ContextMenu>
+                            </Line>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Nodes -->
+                <ItemsControl ItemsSource="{Binding Nodes}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <!-- Apply Canvas.Left and Canvas.Top at the container level -->
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding X}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Ellipse Width="40"
+                                         Height="40" 
+                                         Fill="{Binding Color}"
+                                         Stroke="Black" StrokeThickness="2" 
+                                         MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"
+                                         MouseMove="Ellipse_MouseMove"
+                                         MouseLeftButtonUp="Ellipse_MouseLeftButtonUp"
+                                         Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext}">
+                                    <Ellipse.ToolTip>
+                                        <TextBlock Text="{Binding Id}" />
+                                    </Ellipse.ToolTip>
+                                    <!-- Menu del Nodo -->
+                                    <Ellipse.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Agregar" 
+                                                      Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.Tag.GraphVm.AddEdge}"
+                                                      CommandParameter="{Binding}"/>
+                                            <MenuItem Header="Eliminar"
+                                                      Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.Tag.GraphVm.DeleteNode}"
+                                                      CommandParameter="{Binding}" />
+                                        </ContextMenu>
+                                    </Ellipse.ContextMenu>
+                                    <!-- Fin del Menu del Nodo -->
+                                </Ellipse>
+                                <TextBlock Text="{Binding Text}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Foreground="White" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Canvas>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

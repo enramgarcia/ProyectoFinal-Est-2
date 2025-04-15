@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="ProyectoFinal.Views.Graphs.FindDistanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ProyectoFinal.Views.Graphs"
+             mc:Ignorable="d" 
+             d:DesignHeight="180"
+             d:DesignWidth="450">
+    <Grid Margin="10 0">
+
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <Label Content="Inicio *" />
+                    <ComboBox ItemsSource="{Binding Locations, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="Text"
+                              SelectedValue="{Binding From}"
+                              Width="200">
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="50 0">
+                    <Label Content="Fin *" />
+                    <ComboBox ItemsSource="{Binding ToLocations, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="Text"
+                              SelectedValue="{Binding To}"
+                              IsEnabled="{Binding OptionsEnabled}"
+                              Width="200">
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="Guardar" Command="{Binding FindDistance}" Height="30" Width="60" HorizontalAlignment="Right" Margin="0 10" />
+        </StackPanel>
+    </Grid>
+</UserControl>

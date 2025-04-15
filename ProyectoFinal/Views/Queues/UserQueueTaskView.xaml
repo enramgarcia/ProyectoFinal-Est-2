@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="ProyectoFinal.Views.Queues.UserQueueTaskView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ProyectoFinal.Views.Queues"
+             mc:Ignorable="d" 
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <DataGrid ItemsSource="{Binding Queue}"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Título" Binding="{Binding Title}" Width="*" />
+                <DataGridTextColumn Header="Fecha Entrega" Binding="{Binding CompletionDate, StringFormat=\{0:dd-MM-yyyy\}}"  Width="*" />
+                <DataGridTextColumn Header="Peso" Binding="{Binding Weight, StringFormat=\{0:F2\}}" Width="*" />
+                <DataGridTemplateColumn Header="Prioridad" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="{Binding PriorityBg}" BorderBrush="Black" BorderThickness="1" Margin="5" Width="20" Height="20" HorizontalAlignment="Left" CornerRadius="10"/>
+                                <Label Content="{Binding PriorityDescription}" Margin="5" HorizontalContentAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Estado" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="{Binding StatusBg}" BorderBrush="Black" BorderThickness="1" Margin="5" Width="20" Height="20" HorizontalAlignment="Left" CornerRadius="10"/>
+                                <Label Content="{Binding StatusDescription}" Margin="5" HorizontalContentAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
